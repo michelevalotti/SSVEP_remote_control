@@ -4,6 +4,7 @@ import cv2
 import sys, os
 
 from stimuli import *
+from eeg_cnn import *
 
 
 '''remote control of robot using EEG headset. Streams feed from camera on the robot, when the robot stops iot grabs a frame from the camera,
