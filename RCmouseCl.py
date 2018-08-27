@@ -66,20 +66,3 @@ while(True):
 		s.close()
 		break
 
-	# elif k == ord('w'):
-	# 	print 'sending w'
-	# 	s.send('w')
-
-	# elif k == ord('a'):
-	# 	s.send('a')
-	# 	print 'sending a'
-
-	# elif k == ord('s'):
-	# 	print 'sending s'
-	# 	s.send('s')
-
-	# elif k == ord('d'):
-	# 	print 'sending d'
-	# 	s.send('d')
-	# else:
-	# 	s.send('.')
