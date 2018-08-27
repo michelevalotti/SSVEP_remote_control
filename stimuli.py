@@ -150,8 +150,8 @@ def getCoordinates():
 		screen_refresh_rate = 60 # refresh rate of monitor being used
 		
 		# method2
-		waitdur = 2 # wait time before showing stimuli, in seconds (nik)
-		trialdur = 3 # duration of stimuli, in seconds (nik)
+		waitdur = 2 # wait time before showing stimuli, in seconds
+		trialdur = 3 # duration of stimuli, in seconds
 		tenHz = [1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1,1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, -1, -1]
 		twelveHz = [1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1]
 		fifteenHz = [1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1]
@@ -198,7 +198,7 @@ def getCoordinates():
 		s.connect((host, port))
 
 
-		s.recv(12)
+		rec = s.recv(12)
 
 		# show targets for 2 second without flickering, to allow user to choose
 
@@ -236,7 +236,7 @@ def getCoordinates():
 
 			# method 2
 
-			mywin.flip()
+			mywin.flip() # syncronises loop with screen refresh rate
 			for seconds in range(int(waitdur*60)): # draw just image with targets
 				img.draw()
 				mywin.flip()
