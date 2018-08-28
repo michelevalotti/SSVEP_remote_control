@@ -13,7 +13,8 @@ import matplotlib
 import numpy as np
 
 
-'''robot follows the closest point to the camera, i.e. finger pointed towards it'''
+'''robot follows the closest point to the camera, i.e. finger pointed towards it. Press esc to close
+camera feed and robot.'''
 
 
  
@@ -100,7 +101,6 @@ class ActionTrack(ArAction):
 			else:
 				print('Turn Right')
 				degree_right_rotation = (640/2 - centre_target_x)*(62/640)
-				previous_right_rotation = degree_right_rotation
 				if abs(degree_right_rotation) < 5:
 					print('TARGET ALIGNED')
 					self.myDesired.setVel(100)
