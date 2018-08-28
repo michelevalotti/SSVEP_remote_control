@@ -3,7 +3,7 @@ from socket import *
 import cv2
 import sys, os
 
-from stimuli import *
+from stimuli_RDA import *
 from eeg_cnn import *
 
 
