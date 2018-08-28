@@ -117,16 +117,12 @@ class ActionTrack(ArAction):
 
 			elif self.center_target_x < 640/2: # Check to see if the robot needs to rotate left or right
 				print('Turn Left')
-
-				# self.avg_target_x = np.average((np.where(abs(depth - self.target_depth) < 10))[0]) # target is found by taking avg position of points at same depth as click
-				# avg_target_y = np.average(np.where((depth == target_depth))[1])
-				self.target_dist = abs(self.center_target_x - (640/2))
 				
 				self.center_frame_depth = depth[230:250, 310:330].mean() # mean depth of center of frame (use to stop robot after x meters when target is aligend)
 			
 				degree_left_rotation = (640/2 - self.center_target_x)*(62/640) # 62/640 is FOV/horizontal res of RGB cam
 
-				if abs(self.target_dist) < 5: # Check to see if the robot is aligned with target
+				if abs(degree_left_rotation) < 1: # Check to see if the robot is aligned with target
 					print('TARGET ALIGNED')
 					if self.center_frame_depth < 760: # if center of frame is 1 m in front of robot, stop
 						self.myDesired.setVel(0)
@@ -140,22 +136,18 @@ class ActionTrack(ArAction):
 				else:
 					print('Turning: ',degree_left_rotation)
 					self.myTurning = 1
-					self.myDesired.setDeltaHeading(10 * self.myTurning) # Tell the robot to rotate left by 2 degrees
+					self.myDesired.setDeltaHeading(1 * self.myTurning) # Tell the robot to rotate left by 1 degree
 					self.conn.send('turn')
-					self.center_target_x += self.target_dist # in pixels
+					self.center_target_x += 640/62 # update position of the target (move it 1 degree to the right)
 
 			else:
 				print('Turn Right')
-
-				# self.avg_target_x = np.average((np.where(abs(depth - self.target_depth) < 10))[0])
-				# avg_target_y = np.average(np.where((depth == target_depth))[1])
-				self.target_dist = abs(self.avg_target_x - (640/2))
 
 				self.center_frame_depth = depth[230:250, 310:330].mean() # mean depth of center of frame (use to stop robot after x meters when target is aligend)
 
 				degree_right_rotation = (640/2 - self.center_target_x)*(62/640)
 
-				if abs(self.target_dist) < 5:
+				if abs(degree_right_rotation) < 1:
 					if self.center_frame_depth < 760:
 						self.myDesired.setVel(0)
 						self.conn.send('stop')
@@ -168,10 +160,9 @@ class ActionTrack(ArAction):
 				else:
 					print('Turning: ',degree_right_rotation)
 					self.myTurning = -1
-					self.myDesired.setDeltaHeading(10 * self.myTurning)
+					self.myDesired.setDeltaHeading(1 * self.myTurning)
 					self.conn.send('turn')
-					self.center_target_x -= self.target_dist
-
+					self.center_target_x -= 640/62
 		return self.myDesired # Return the desired action for the robot 
 
 
