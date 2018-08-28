@@ -123,39 +123,31 @@ class ActionTrack(ArAction):
 			elif self.centre_target_x < 640/2: # Check to see if the robot needs to rotate left or right
 				print('Turn Left')
 
-				self.avg_target_x = np.average((np.where(abs(blur - self.target_depth) < 10))[0]) # target is found by taking avg position of points at same depth as click
-				# avg_target_y = np.average(np.where((blur == target_depth))[1])
-				self.target_dist = abs(self.avg_target_x - (640/2))
-
 				degree_left_rotation = (640/2 - self.centre_target_x)*(62/640) # 62/640 is FOV/horizontal res
 
-				if abs(self.target_dist) < 5: # Check to see if the robot is aligned with target
+				if abs(degree_left_rotation) < 1: # Check to see if the robot is aligned with target
 					print('TARGET ALIGNED')
-					self.myDesired.setVel(0) # Tell the robot to move forward
+					self.myDesired.setVel(10) # Tell the robot to move forward
 				else:
 					print('Turning: ',degree_left_rotation)
 					self.myTurning = 1
-					self.myDesired.setDeltaHeading(10 * self.myTurning) # Tell the robot to rotate left by 2 degrees
-					self.centre_target_x += self.target_dist # in pixels
+					self.myDesired.setDeltaHeading(1 * self.myTurning) # Tell the robot to rotate left by 1 degree
+					self.centre_target_x += 640/62 # update position of target (move it 1 degree to the right)
 
 			else:
 				print('Turn Right')
 
-				self.avg_target_x = np.average((np.where(abs(blur - self.target_depth) < 10))[0])
-				# avg_target_y = np.average(np.where((blur == target_depth))[1])
-				self.target_dist = abs(self.avg_target_x - (640/2))
-
 				degree_right_rotation = (640/2 - self.centre_target_x)*(62/640)
 
-				if abs(self.target_dist) < 5:
+				if abs(degree_right_rotation) < 1:
 					print('TARGET ALIGNED')
-					self.myDesired.setVel(0)
+					self.myDesired.setVel(10)
 				else:
 					print('Turning: ',degree_right_rotation)
 					self.myTurning = -1
-					self.myDesired.setDeltaHeading(10 * self.myTurning)
+					self.myDesired.setDeltaHeading(1 * self.myTurning)
 
-					self.centre_target_x -= self.target_dist
+					self.centre_target_x -= 640/62
 
 		return self.myDesired # Return the desired action for the robot 
 
