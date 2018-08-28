@@ -82,7 +82,7 @@ class ActionTrack(ArAction):
 		send_pic = send_pic[1].tostring()
 
 
-		conn.send('RGBIMG'+send_pic+'GRAIMG'+send_depth+'ENDIMG')
+		self.conn.send('RGBIMG'+send_pic+'GRAIMG'+send_depth+'ENDIMG')
 
 
 		rec = self.conn.recv(16) # receive target coordinates
@@ -118,16 +118,16 @@ class ActionTrack(ArAction):
 			elif self.center_target_x < 640/2: # Check to see if the robot needs to rotate left or right
 				print('Turn Left')
 				
-				self.center_frame_depth = depth[230:250, 310:330].mean() # mean depth of center of frame (use to stop robot after x meters when target is aligend)
+				center_frame_depth = depth[230:250, 310:330].mean() # mean depth of center of frame (use to stop robot after x meters when target is aligend)
 			
 				degree_left_rotation = (640/2 - self.center_target_x)*(62/640) # 62/640 is FOV/horizontal res of RGB cam
 
 				if abs(degree_left_rotation) < 1: # Check to see if the robot is aligned with target
 					print('TARGET ALIGNED')
-					if self.center_frame_depth < 760: # if center of frame is 1 m in front of robot, stop
+					if center_frame_depth < 760: # if center of frame is 1 m in front of robot, stop
 						self.myDesired.setVel(0)
 						self.conn.send('stop')
-					if abs(self.center_frame_depth - self.target_depth) < 920: # robot only moves forward for 2 meters
+					if abs(center_frame_depth - self.target_depth) < 920: # robot only moves forward for 2 meters
 						self.myDesired.setVel(10) # Tell the robot to move forward
 						self.conn.send('forw')
 					else:
@@ -143,15 +143,15 @@ class ActionTrack(ArAction):
 			else:
 				print('Turn Right')
 
-				self.center_frame_depth = depth[230:250, 310:330].mean() # mean depth of center of frame (use to stop robot after x meters when target is aligend)
+				center_frame_depth = depth[230:250, 310:330].mean() # mean depth of center of frame (use to stop robot after x meters when target is aligend)
 
 				degree_right_rotation = (640/2 - self.center_target_x)*(62/640)
 
 				if abs(degree_right_rotation) < 1:
-					if self.center_frame_depth < 760:
+					if center_frame_depth < 760:
 						self.myDesired.setVel(0)
 						self.conn.send('stop')
-					if abs(self.center_frame_depth - self.target_depth) < 920:
+					if abs(center_frame_depth - self.target_depth) < 920:
 						self.myDesired.setVel(10) # Tell the robot to move forward
 						self.conn.send('forw')
 					else:
