@@ -14,16 +14,6 @@ import stat
 '''remote control of the robot with mouse double click. Run this on the robot. Streams camera feed to client and waits fror target coordinates
 from the server (pixel position of double click)'''
 
-
-
-def getDepthMap():	
-	depth, timestamp = freenect.sync_get_depth()
- 
-	np.clip(depth, 0, 2**10 - 1, depth)
-	depth >>= 2
-	depth = depth.astype(np.uint8)
-
-	return depth
 	
 mouseX, mouseY = 320, 240
 
@@ -42,8 +32,8 @@ class ActionTrack(ArAction):
 	def __init__(self, turnThreshold, turnAmount):
 		ArAction.__init__(self, "Turn")
 		server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		host = '10.245.31.75'
-		port = 12391
+		host = '10.245.62.18'
+		port = 12374
 		server.bind((host, port))
 		print 'socket bind created'
 		server.listen(5)
@@ -60,8 +50,8 @@ class ActionTrack(ArAction):
 		# initilise at random values
 		self.clickX = 1000
 		self.clickY = 1000
-		self.centre_target_x = 0
-		self.centre_target_y = 0
+		self.center_target_x = 0
+		self.center_target_y = 0
 		self.target_depth = 10
 		self.avg_target_x = 10
 		self.target_dist = 10
@@ -78,20 +68,21 @@ class ActionTrack(ArAction):
 	
 		# reset the actionDesired (must be done)
 		self.myDesired.reset()
-				
-		depth = getDepthMap() #get depth info from kinect
-		blur = cv2.GaussianBlur(depth, (9, 9), 0) #apply gaussian blur to avoid false positives and deal with random noise
-		(minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(blur) #find values for brightest (furthest) and darkest (closest) point in image
-		cv2.circle(blur, minLoc, 30, (0, 0, 255), 2) #plot circle around closest point
-
-		send_blur = blur.tostring()
 		
-		self.conn.send('XXX'+send_blur)
+		depth,_ = freenect.sync_get_depth() #get depth info from kinect
+		np.clip(depth, 0, 2**10 - 1, depth)
+		send_depth = np.uint16(depth)
+		send_depth = send_depth.tostring()
+		
+		pic,_ = freenect.sync_get_video() #send color image to client
+		pic = cv2.cvtColor(pic, cv2.COLOR_BGR2RGB)
 
-		blur = np.fromstring(send_blur, dtype=np.uint8).reshape(480,640)
+		send_pic = cv2.imencode('.jpg', pic)
+		send_pic = send_pic[1].tostring()
+
+		self.conn.send('RGBIMG'+send_pic+'GRAIMG'+send_depth+'ENDIMG')
 
 		rec = self.conn.recv(10) # receive mouse double click coordinate
-		
 
 		if rec == 'x':
 			print('Exiting...')
@@ -106,24 +97,23 @@ class ActionTrack(ArAction):
 		if ((self.clickX != mouseX) or (self.clickY != mouseY)):
 			self.clickX = mouseX
 			self.clickY = mouseY
-			self.centre_target_x = self.clickX
-			self.centre_target_y = self.clickY
-			self.target_depth = blur[int(mouseY), int(mouseX)]
+			self.center_target_x = self.clickX
+			self.center_target_y = self.clickY
 			print mouseX, mouseY
 
 
 
 		else:
 
-			if (self.centre_target_x == 320 and self.centre_target_y == 240):
+			if (self.center_target_x == 320 and self.center_target_y == 240):
 
 				self.myDesired.setVel(0) # Tell the robot to do nothing
 
 
-			elif self.centre_target_x < 640/2: # Check to see if the robot needs to rotate left or right
+			elif self.center_target_x < 640/2: # Check to see if the robot needs to rotate left or right
 				print('Turn Left')
 
-				degree_left_rotation = (640/2 - self.centre_target_x)*(62/640) # 62/640 is FOV/horizontal res
+				degree_left_rotation = (640/2 - self.center_target_x)*(62/640) # 62/640 is FOV/horizontal res
 
 				if abs(degree_left_rotation) < 1: # Check to see if the robot is aligned with target
 					print('TARGET ALIGNED')
@@ -131,13 +121,13 @@ class ActionTrack(ArAction):
 				else:
 					print('Turning: ',degree_left_rotation)
 					self.myTurning = 1
-					self.myDesired.setDeltaHeading(1 * self.myTurning) # Tell the robot to rotate left by 1 degree
-					self.centre_target_x += 640/62 # update position of target (move it 1 degree to the right)
+					self.myDesired.setDeltaHeading(2 * self.myTurning) # Tell the robot to rotate left by 1 degree
+					self.center_target_x += 640/62 # update position of target (move it 1 degree to the right)
 
 			else:
 				print('Turn Right')
 
-				degree_right_rotation = (640/2 - self.centre_target_x)*(62/640)
+				degree_right_rotation = (640/2 - self.center_target_x)*(62/640)
 
 				if abs(degree_right_rotation) < 1:
 					print('TARGET ALIGNED')
@@ -145,9 +135,8 @@ class ActionTrack(ArAction):
 				else:
 					print('Turning: ',degree_right_rotation)
 					self.myTurning = -1
-					self.myDesired.setDeltaHeading(1 * self.myTurning)
-
-					self.centre_target_x -= 640/62
+					self.myDesired.setDeltaHeading(2 * self.myTurning)
+					self.center_target_x -= 640/62
 
 		return self.myDesired # Return the desired action for the robot 
 
