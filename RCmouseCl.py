@@ -33,30 +33,43 @@ while(True):
 	frame = frame_extra
 	frame_extra = ''
 
-	while len(frame) < 307200:
-		
-		rec = s.recv(307203)
+	while(True):
 
+		# receive and display frame
+
+		rec = s.recv(2048)
 		frame += rec
+		
+		RGBIMGpos = frame.find('RGBIMG')
+		if RGBIMGpos != -1:
+			startRGB = 6 + RGBIMGpos
+		GRAYIMGpos = frame.find('GRAIMG')
+		if GRAYIMGpos != -1:
+			startDEPTH = 6 + GRAYIMGpos
+		ENDIMGpos = frame.find('ENDIMG')
+		if ENDIMGpos != -1:
+			endDEPTH = ENDIMGpos
+			break
 
-		# if len(frame) >= 307200:
-		# 	break
-
-	startim = 3+frame.find('XXX')
-	frame_extra += frame[(startim+307200):]
-	frame = frame[startim:(startim+307200)]
+	frame_extra += frame[(endDEPTH+6):]
+	frameRGB = frame[startRGB:(startDEPTH-6)]
+	frameDEPTH = frame[startDEPTH:endDEPTH]
 
 
-	if len(frame) == 307200:
-		frame = np.fromstring(frame, dtype=np.uint8).reshape(480,640)
-		cv2.imshow('image', frame)
-		cv2.setMouseCallback('image', doubleclick_pos)
-		s.send(str(mouseX)+','+str(mouseY))
+	# if len(frame) == 307200:
+	frameRGB = np.fromstring(frameRGB, dtype=np.uint8)
+	frameRGB = cv2.imdecode(frameRGB,1) # rgb frame is jpg encoded
+	frameRGB = frameRGB.reshape(480,640,3)
+	
+	frameDEPTH = np.fromstring(frameDEPTH, dtype=np.uint16) # depth frame is 10 bit
+	frameDEPTH = frameDEPTH.reshape(480,640)
+	depth_eight = np.uint8(frameDEPTH)
 
 
-	else:
-		x += 1
-		#print 'frame skipped', x
+	cv2.imshow('depth', depth_eight)
+	cv2.imshow('RGB', frameRGB)
+	cv2.setMouseCallback('RGB', doubleclick_pos)
+	s.send(str(mouseX)+','+str(mouseY))
 
 
 
