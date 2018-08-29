@@ -281,11 +281,11 @@ if len(center_coords) != 0: # show flickering stimuli if we have a target
 			break
 
 	sample_tot = np.asarray(sample_tot[:1500]).reshape(1500,len(sample_tot[0]))
+	sample_tot = np.array([sample_tot]) # format needed for CNN (classification)
 
 
 
-
-	chosen_target = classification(sample_tot,0) # runs CNN on sample_tot, returns 0, 1 or 2
+	chosen_target = classification(sample_tot[0,:,:],0) # runs CNN on sample_tot, returns 0, 1 or 2, second parameter is not used
 
 	target_coords = center_coords[chosen_target]
 
