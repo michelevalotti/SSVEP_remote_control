@@ -5,6 +5,7 @@ import numpy as np
 from psychopy import *
 import sys, os
 from socket import *
+import rdaclient as rc
 from eeg_cnn import *
 
 
@@ -226,12 +227,13 @@ if len(center_coords) != 0: # show flickering stimuli if we have a target
 	end_sample = client.last_sample # obtain number of latest sample written to buffer (end of meaningful data in our case)
 	sig = client.get_data(start_sample, end_sample) # get data from buffer
 	sig = sig[:1500,:8] # slice array to get the right shape for CNN (1500 arrays of 8 elements - for 8 EEG sensors)
+	sig = np.arary([sig]) # format needed for CNN (classification)
 
 	# cleanup
 	mywin.close()
 
 
-	chosen_target = classification(sig, 0) # runs CNN on sample_tot, returns 0, 1 or 2, second parameter is not used by function
+	chosen_target = classification(sig[0,:,:], 0) # runs CNN on sample_tot, returns 0, 1 or 2, second parameter is not used by function
 
 	target_coords = center_coords[chosen_target] # pick cooordinates corresponding to chosen target
 
