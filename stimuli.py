@@ -246,6 +246,7 @@ def getCoordinates():
 
 			for seconds in range(int(trialdur)): # flicker targets
 				for frameN in range(len(freqs[0])): # 60 frames (1 sec)
+					img.draw()
 					for obj in grating_list:
 						frame_f0 = obj[1] # 10, 12 or 15 hz
 						if frame_f0[frameN] == 1 :
