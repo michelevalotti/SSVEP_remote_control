@@ -104,6 +104,10 @@ class ActionTrack(ArAction):
 			self.center_target_x = self.clickX
 			self.center_target_y = self.clickY
 			self.target_depth = depth[int(mouseY)-10:int(mouseY)+10, int(mouseX)-10:int(mouseX)+10].mean()
+			if (self.center_target_x == 320 and self.center_target_y == 240): # only send once (at the beginning), or else the client keeps sending new coordinates
+				self.conn.send('stop')
+			else:
+				self.conn.send('none') # client still receives string but does not get new coordinates
 			print mouseX, mouseY
 
 
