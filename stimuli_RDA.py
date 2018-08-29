@@ -1,7 +1,7 @@
 from __future__ import division
 import cv2
 import numpy as np
-import freenect
+# import freenect # only use for debugging
 from psychopy import *
 import sys, os
 from socket import *
