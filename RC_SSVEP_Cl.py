@@ -3,7 +3,6 @@ from socket import *
 import cv2
 import sys, os
 
-from stimuli_RDA import *
 from eeg_cnn import *
 
 
@@ -14,7 +13,7 @@ The targets are shown and flickerd by stimuli.py and the data gathered by the EE
 each frequency corresponds to a target.'''
 
 
-
+# set up connection
 s = socket(AF_INET,SOCK_STREAM)
 host = '129.234.103.140'
 port = 12391
@@ -78,14 +77,15 @@ while(True):
 	if rec_str == 'stop':
 
 		while(True):
-			# when robot stops, run stimuli and get new target coordinates
+			# when robot stops, run stimuli and get new target coordinates, run this until a target is found
 
-			cv2.imwrite('rgb.jpg', frame) # save for stimuli.py script
-			np.save('depth.npy', depth) # save as numpy array because it is 10 bit
+			cv2.imwrite('rgb.jpg', frameRGB) # save for stimuli.py script
+			np.save('depth.npy', frameDEPTH) # save as numpy array because it is 10 bit
 
-			print 'RUN LSL SCRIPT ON WINDOWS MACHINE'
+			print 'IF USING LSL SERVER, RUN LSL SCRIPT ON WINDOWS MACHINE'
 
-			center_coords = getCoordinates() # calls stimuli.py and gets new target coordinates based on EEG CNN results
+			os.system('python stimuli_RDA.py') # psychopy conflicts with cv2, so cannot call stimuli_RDA as a function
+			center_coords = np.load('target.npy')
 			targetX = center_coords[0]
 			targetY = center_coords[1]
 
