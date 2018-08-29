@@ -3,8 +3,9 @@ from socket import *
 import cv2
 
 
-'''client for remote control of the robot using mouse input. This script receives and displays the camera feed from the robot.
-Use a double click to select a target on the displayed feed, the robot will turn towards it and drive forward'''
+'''client for remote control of the robot using mouse input. This script receives and displays the camera feed from the robot
+(both RGB and depth image). Use a double click to select a target on the displayed RGB image, the robot will turn towards it
+and drive forward'''
 
 
 s = socket(AF_INET,SOCK_STREAM)
