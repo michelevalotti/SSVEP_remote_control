@@ -3,12 +3,9 @@ import socket
 import freenect
 import cv2
 import numpy as np
-import sys
 from AriaPy import *
 import os
 import sys
-import time
-import stat
 
 
 '''Remote control of robot using EEG headset. The target coordinates are received from the Client and the robot turns towards its 
