@@ -3,12 +3,8 @@ import socket
 import freenect
 import cv2
 import numpy as np
-import sys
 from AriaPy import *
-import os
-import sys
-import time
-import stat
+
 
 
 '''remote control of the robot with mouse double click. Run this on the robot. Streams camera feed to client and waits fror target coordinates
