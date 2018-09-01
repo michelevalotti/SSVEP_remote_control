@@ -1,15 +1,7 @@
 from __future__ import division 
-import sys
 from AriaPy import *
-import pickle
-import os
-import sys
-import time
-import stat
-
 import cv2
 import freenect
-import matplotlib
 import numpy as np
 
 
