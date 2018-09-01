@@ -3,12 +3,7 @@ import socket
 import freenect
 import cv2
 import numpy as np
-import sys
 from AriaPy import *
-import os
-import sys
-import time
-import stat
 
 
 '''select a target on the camera stream with a double click, the robot will reorient itself towards it and drive forward'''
