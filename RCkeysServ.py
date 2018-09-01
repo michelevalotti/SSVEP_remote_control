@@ -3,13 +3,7 @@ import socket
 import freenect
 import cv2
 import numpy as np
-import sys
 from AriaPy import *
-import os
-import sys
-import time
-import stat
-
 
 '''remote control of the robot through WASD keys. Run this script on the robot. Streams camera feed to the client and
 waits for keybord inputs from it'''
