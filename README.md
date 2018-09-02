@@ -41,6 +41,7 @@ The requirements are:
 - Numpy
 - Socket
 - OpenCV
+- PyTorch
 - freenect
 - AriaPy
 - [PsychoPy](http://psychopy.org/installation.html)
