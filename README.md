@@ -74,7 +74,7 @@ The scripts to run to control the robot with the EEG headset are RC_SSVEP_Serv.p
 
 ### Selecting the targets and creating the stimuli
 
-When the robot stops, the script Stimuli_RDA.py receives the RGB and Depth images from the Kinect camera, and uses a [neural network](https://github.com/CSAILVision/semantic-segmentation-pytorch) to segment the RGB image. The background and floor planes are then discarded using a HSV filter, as they have low saturation. Of the ramaining contours, the ones with reasonably sized areas are selected and their depth calculated from the Kinect data. If they are not too far they are then flickered at 10, 12 and 15 hz. A maximum of three targets is selelcted, as the CNN to decode the signal is trained on three classes.
+When the robot stops, the script Stimuli_RDA.py receives the RGB and Depth images from the Kinect camera, and uses a [neural network](https://github.com/CSAILVision/semantic-segmentation-pytorch) developed by CSAIL Computer Vision to segment the RGB image. The background and floor planes are then discarded using a HSV filter, as they have low saturation. Of the ramaining contours, the ones with reasonably sized areas are selected and their depth calculated from the Kinect data. If they are not too far they are then flickered at 10, 12 and 15 hz. A maximum of three targets is selelcted, as the CNN to decode the signal is trained on three classes.
 
 ### Gathering and decoding the brain signal
 
