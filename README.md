@@ -37,7 +37,8 @@ The software to acquire the data from the EEG kit was run on a windows machine (
 
 ### Software
 Python2.x and Python3.x -- unfortunately some libraries run only on either one or the other verion.
-The requirements are:
+
+The required libraries are:
 - Numpy
 - Socket
 - OpenCV
