@@ -56,7 +56,7 @@ AriaPy can be installed from [here](http://robots.mobilerobots.com/wiki/ARIA) --
 The Cognionics Data Acquisition software can be daownloaded [here](http://cognionics.com/wiki/pmwiki.php/Main/DataAcquisitionSoftware). This software only runs on windows, but can be connected to other operating systems through a network.
 
 
-## Descriptiom of the project
+## Description of the project
 ### Controlling the robot
 
 _Example Scripts_
