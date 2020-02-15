@@ -55,7 +55,7 @@ AriaPy can be installed from [here](http://robots.mobilerobots.com/wiki/ARIA) --
 - it might be necessary to run ```sudo chmod -R 666 /dev/ttyUSB0 ``` to give access to the usb port
 - If it does not exist already, create a file named Aria.args in /etc and add the text ```-robotPort /dev/ttyUSB0```
 
-The Cognionics Data Acquisition software can be daownloaded [here](http://cognionics.com/wiki/pmwiki.php/Main/DataAcquisitionSoftware). This software only runs on windows, but can be connected to other operating systems through a network.
+The Cognionics Data Acquisition software can be downloaded [here](http://cognionics.com/wiki/pmwiki.php/Main/DataAcquisitionSoftware). This software only runs on windows, but can be connected to other operating systems through a network.
 
 
 ## Description of the project
